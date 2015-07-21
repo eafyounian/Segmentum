@@ -8,7 +8,7 @@ Segmentum is a fast tool for the identification of CNAs and copy-neutral loss of
 ## Input files
 **1.** Tumor and its matched normal coverage files with WIG format.
         
-        **Example**  
+**Example**  
         
         fixedStep chrom=chr20 start=1 step=1000
         140
@@ -64,9 +64,7 @@ Segmentum outputs a SEG file with the same name as the tumor file.
 In order to visualize the results in IGV a new file should be created containing only first 5 fields of the output file.
 
 **Example**  
-        
     `cut -f1,2,3,4,5 G9_6338_t.seg  > IGV_g9_6338.seg`
-
 The IGV_g9_6338.seg is now ready to be loaded in IGV.
     
 ## Extracting copy neutral LOH regions
@@ -109,7 +107,8 @@ Options:
 In order to create the B-allele-fraction file, one can use the Pypette package available at: (https://github.com/annalam/pypette) using the following commands:
 
 ```    
-variant call <genome_fasta> <bam_files>... [-r REGION] [--ref=N:R] [--hetz=N:R] [--homz=N:R] [-q N] [-Q SAMPLES] [--keep-all] variant keep samples <vcf_file> <regex>  
+variant call <genome_fasta> <bam_files>... [-r REGION] [--ref=N:R] [--hetz=N:R] [--homz=N:R] [-q N] [-Q SAMPLES] [--keep-all]  
+variant keep samples <vcf_file> <regex>  
 variant heterozygous bases <vcf_file> <pos_file>   
 variant discard samples <vcf_file> <regex>  
 variant allele fractions <vcf_file> <pos_file>   
