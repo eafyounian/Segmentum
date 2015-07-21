@@ -64,7 +64,7 @@ Segmentum outputs a SEG file with the same name as the tumor file.
 In order to visualize the results in IGV a new file should be created containing only first 5 fields of the output file.
 
 **Example**  
-    `cut -f1,2,3,4,5 G9_6338_t.seg  > IGV_g9_6338.seg`
+    `cut -f1,2,3,4,5 G9_6338_t.seg  > IGV_g9_6338.seg`  
 The IGV_g9_6338.seg is now ready to be loaded in IGV.
     
 ## Extracting copy neutral LOH regions
@@ -80,8 +80,7 @@ Options:
 ```
 
 **Example**  
-    
-    `python Recurrent_cnLOH.py G9_6338_t.seg`
+`python Recurrent_cnLOH.py G9_6338_t.seg`  
 
 ## Creating the input files from BAM files
 In order to create the coverage files, one can use the Pypette package available at: (https://github.com/annalam/pypette) using the following command:
@@ -98,11 +97,10 @@ Options:
 ```
     
 **Example**  
-    
-    ```
-    coverage tiled G9_6338_t.bam 2000 | gzip -c > G9_6338_t.wig.gz
-    coverage tiled G9_6338_n.bam 2000 | gzip -c > G9_6338_n.wig.gz
-    ```
+```
+coverage tiled G9_6338_t.bam 2000 | gzip -c > G9_6338_t.wig.gz
+coverage tiled G9_6338_n.bam 2000 | gzip -c > G9_6338_n.wig.gz
+```
         
 In order to create the B-allele-fraction file, one can use the Pypette package available at: (https://github.com/annalam/pypette) using the following commands:
 
