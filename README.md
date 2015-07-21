@@ -122,10 +122,11 @@ Options:
 ```
 
 **Example**  
-        
-1. Run the following command for each chromosome (example command for chr20 is shown):
-    `variant call --hetz=4:0.15 --homz=4:0.8 --ref=8:0.95 -Q _n -r chr20 hg19.fa G9_6338_t.bam G9_6338_n.bam | gzip -c > chr20.vcf.gz`
-2. `cat <(gunzip -c chr1.vcf.gz | grep 'CHROM') <(cat chr{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,X,Y}.vcf.gz | gunzip -c | grep -v 'CHROM') | pigz -c > variants.vcf.gz`
-3. `variant keep samples variants.vcf.gz G9_6338_n.bam | variant heterozygous bases - heterozygous_SNPs_position_file > heterozygous_snps.tsv`
-4. `gzip heterozygous_snps.tsv`
-5. `variant discard samples variants.vcf.gz G9_6338_n.bam | variant allele fractions - heterozygous.tsv.gz | gzip -c > B_allele_fractions.tsv.gz`
+```
+1. Run the following command for each chromosome (example command for chr20 is shown):  
+variant call --hetz=4:0.15 --homz=4:0.8 --ref=8:0.95 -Q _n -r chr20 hg19.fa G9_6338_t.bam G9_6338_n.bam | gzip -c > chr20.vcf.gz
+2. cat <(gunzip -c chr1.vcf.gz | grep 'CHROM') <(cat chr{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,X,Y}.vcf.gz | gunzip -c | grep -v 'CHROM') | pigz -c > variants.vcf.gz
+3. variant keep samples variants.vcf.gz G9_6338_n.bam | variant heterozygous bases - heterozygous_SNPs_position_file > heterozygous_snps.tsv
+4. gzip heterozygous_snps.tsv
+5. variant discard samples variants.vcf.gz G9_6338_n.bam | variant allele fractions - heterozygous.tsv.gz | gzip -c > B_allele_fractions.tsv.gz
+```
