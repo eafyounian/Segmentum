@@ -6,18 +6,18 @@ Segmentum a fast tool for copy number analysis of cancer genome.
 Segmentum is a fast tool for the identification of CNAs and copy-neutral loss of heterozygosity (LOH) in tumor samples using whole-genome sequencing data. Segmentum segments the genome by analyzing the read-depth and B-allele fraction profiles using a double sliding window method. It requires a matched normal sample to correct for biases such as GC-content and mapability and to discriminate somatic from germline events. Segmentum, written in the Python programming language, is fast and performs segmentation of a whole genome in less than two minutes.
     
 ## Input files
-1. Tumor and its matched normal coverage files with WIG format.
+**1.** Tumor and its matched normal coverage files with WIG format.
         
-**Example**  
+        **Example**  
         
-    fixedStep chrom=chr20 start=1 step=1000
-    140
-    151
-    159
-    144
-    131
+        fixedStep chrom=chr20 start=1 step=1000
+        140
+        151
+        159
+        144
+        131
 
-2. B-allele-fraction file containing the B-allele fractions at heterozygous SNPs.
+**2.** B-allele-fraction file containing the B-allele fractions at heterozygous SNPs.
 
 **Example**  
     
@@ -45,17 +45,16 @@ Segmentum outputs a SEG file containing the identified segments.
 Segmentum can be run with the following command:
 
 ```    
-Segmentum.py <tumor_coverage> <normal_coverage> <B_allele_fraction> <window_size> <clogr_threshold> <BAF_threshold> [-l N] [-b N] [-m N] [-z N]
-```
+Segmentum.py <tumor_coverage> <normal_coverage> <B_allele_fraction> <window_size> <clogr_threshold> <BAF_threshold> [-l N] [-b N] [-m N] [-z N]  
 
-```        
 Options:  
     -h --help             Show this screen  
     -l --logr_merge=N     Logratio merging threshold [default: 0.15]  
     -b --baf_merge=N      B-allele fraction merging threshold [default: 0.05]  
     -m --min_read=N       Minimum number of reads for a position to be considered while calculating the coverage logratio [default: 50]  
     -z --z_score=N        Number of standard deviations away from the mean to call a breakpoint [default: 5]    
-``` 
+```
+
 **Example**   
     `python Segmentum.py G9_6338_t.wig.gz G9_6338_n.wig.gz B_allele_fraction.tsv.gz 11 0.8 0.3`
 
@@ -72,52 +71,59 @@ The IGV_g9_6338.seg is now ready to be loaded in IGV.
     
 ## Extracting copy neutral LOH regions
 In order to extract copy neutral LOH regions from the output(s) following command is used:
+
+```
+python Recurrent_cnLOH.py <seg_files>... [-c N] [-b N]  
     
-`python Recurrent_cnLOH.py <seg_files>... [-c N] [-b N]`  
-    
-Options:
+Options:  
     -h --help         Show this screen.
     -c --clogr_thresh=N   Coverage logratio must be below this threshold to call a copy neutral LOH region [default: 0.1]
     -b --baf_thresh=N     B-allele fraction must be below this threshold to call a copy neutral LOH region [default: 0.15]  
-        
+```
+
 **Example**  
     
     `python Recurrent_cnLOH.py G9_6338_t.seg`
 
 ## Creating the input files from BAM files
 In order to create the coverage files, one can use the Pypette package available at: (https://github.com/annalam/pypette) using the following command:
-    
-`coverage tiled <bam_file> <window_size> [-s N] [-q N] [-S|-1|-2] [-P|-M]`
+
+```    
+coverage tiled <bam_file> <window_size> [-s N] [-q N] [-S|-1|-2] [-P|-M]  
         
-Options: 
-    -q --quality=N Minimum alignment quality [default: 10]. 
-    -s --step=N Step size for window placement [default: window size / 2]. 
-    -S --single Use all reads for coverage calculation, not just paired. 
-    -P --plus Calculate coverage only for the plus strand. 
+Options:   
+    -q --quality=N Minimum alignment quality [default: 10].  
+    -s --step=N Step size for window placement [default: window size / 2].   
+    -S --single Use all reads for coverage calculation, not just paired.   
+    -P --plus Calculate coverage only for the plus strand.   
     -M --minus Calculate coverage only for the minus strand.  
+```
     
 **Example**  
     
-    `coverage tiled G9_6338_t.bam 2000 | gzip -c > G9_6338_t.wig.gz`
-    `coverage tiled G9_6338_n.bam 2000 | gzip -c > G9_6338_n.wig.gz`
+    ```
+    coverage tiled G9_6338_t.bam 2000 | gzip -c > G9_6338_t.wig.gz
+    coverage tiled G9_6338_n.bam 2000 | gzip -c > G9_6338_n.wig.gz
+    ```
         
 In order to create the B-allele-fraction file, one can use the Pypette package available at: (https://github.com/annalam/pypette) using the following commands:
-    
-`variant call <genome_fasta> <bam_files>... [-r REGION] [--ref=N:R] [--hetz=N:R] [--homz=N:R] [-q N] [-Q SAMPLES] [--keep-all] `
-`variant keep samples <vcf_file> <regex>` 
-`variant heterozygous bases <vcf_file> <pos_file>` 
-`variant discard samples <vcf_file> <regex>` 
-`variant allele fractions <vcf_file> <pos_file>` 
+
+```    
+variant call <genome_fasta> <bam_files>... [-r REGION] [--ref=N:R] [--hetz=N:R] [--homz=N:R] [-q N] [-Q SAMPLES] [--keep-all] variant keep samples <vcf_file> <regex>  
+variant heterozygous bases <vcf_file> <pos_file>   
+variant discard samples <vcf_file> <regex>  
+variant allele fractions <vcf_file> <pos_file>   
         
-Options: 
-    -r <region> Restrict analysis to chromosomal region 
-    -q N Minimum mapping quality score [default: 10] 
-    -Q SAMPLES Samples for which mapping quality is ignored [default: ] 
-    --ref=N:R Minimum evidence for homozygous reference [default: 8:0.9] 
-    --hetz=N:R Minimum evidence for heterozygous [default: 4:0.25] 
-    --homz=N:R Minimum evidence for homozygous alt [default: 4:0.8] 
-    --keep-all Show sites even if they are all homozygous reference  
-    
+Options:  
+    -r <region> Restrict analysis to chromosomal region  
+    -q N Minimum mapping quality score [default: 10]  
+    -Q SAMPLES Samples for which mapping quality is ignored [default: ]  
+    --ref=N:R Minimum evidence for homozygous reference [default: 8:0.9]  
+    --hetz=N:R Minimum evidence for heterozygous [default: 4:0.25]  
+    --homz=N:R Minimum evidence for homozygous alt [default: 4:0.8]  
+    --keep-all Show sites even if they are all homozygous reference    
+```
+
 **Example**  
         
 1. Run the following command for each chromosome (example command for chr20 is shown):
