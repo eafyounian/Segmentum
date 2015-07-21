@@ -45,14 +45,15 @@ Segmentum outputs a SEG file containing the identified segments.
 Segmentum can be run with the following command:
     
 `Segmentum.py <tumor_coverage> <normal_coverage> <B_allele_fraction> <window_size> <clogr_threshold> <BAF_threshold> [-l N] [-b N] [-m N] [-z N]`
-        
+
+```        
 Options:  
     -h --help             Show this screen  
     -l --logr_merge=N     Logratio merging threshold [default: 0.15]  
     -b --baf_merge=N      B-allele fraction merging threshold [default: 0.05]  
     -m --min_read=N       Minimum number of reads for a position to be considered while calculating the coverage logratio [default: 50]  
     -z --z_score=N        Number of standard deviations away from the mean to call a breakpoint [default: 5]    
-
+``` 
 **Example**   
     `python Segmentum.py G9_6338_t.wig.gz G9_6338_n.wig.gz B_allele_fraction.tsv.gz 11 0.8 0.3`
 
