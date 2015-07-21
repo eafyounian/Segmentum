@@ -43,8 +43,10 @@ Segmentum outputs a SEG file containing the identified segments.
      
 ## Running Segmentum
 Segmentum can be run with the following command:
-    
-`Segmentum.py <tumor_coverage> <normal_coverage> <B_allele_fraction> <window_size> <clogr_threshold> <BAF_threshold> [-l N] [-b N] [-m N] [-z N]`
+
+```    
+Segmentum.py <tumor_coverage> <normal_coverage> <B_allele_fraction> <window_size> <clogr_threshold> <BAF_threshold> [-l N] [-b N] [-m N] [-z N]
+```
 
 ```        
 Options:  
