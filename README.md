@@ -5,10 +5,10 @@ Segmentum a fast tool for copy number analysis of cancer genome.
 
 Segmentum is a fast tool for the identification of CNAs and copy-neutral loss of heterozygosity (LOH) in tumor samples using whole-genome sequencing data. Segmentum segments the genome by analyzing the read-depth and B-allele fraction profiles using a double sliding window method. It requires a matched normal sample to correct for biases such as GC-content and mapability and to discriminate somatic from germline events. Segmentum, written in the Python programming language, is fast and performs segmentation of a whole genome in less than two minutes.
     
-## Input files:
+## Input files
 1. Tumor and its matched normal coverage files with WIG format.
         
-    *Example*
+    **Example**
             
         fixedStep chrom=chr20 start=1 step=1000
         140
@@ -19,7 +19,7 @@ Segmentum is a fast tool for the identification of CNAs and copy-neutral loss of
 
 2. B-allele-fraction file containing the B-allele fractions at heterozygous SNPs.
 
-    *Example*
+    **Example**
     
         CHROM   POSITION    REF     ALT     G9_6338_t
         chr1    10174       C       T       0.00
@@ -31,7 +31,7 @@ Segmentum is a fast tool for the identification of CNAs and copy-neutral loss of
 ## Output files
 Segmentum outputs a SEG file containing the identified segments. 
     
-    *Example*
+    **Example**
     
         'ID             chrom   loc.start       loc.end         seg.mean        baf.mean
         G9_6338_t       chr14   22425001        23000001        0.246188        0.425905
@@ -53,7 +53,8 @@ Segmentum can be run with the following command:
         -m --min_read=N       Minimum number of reads for a position to be considered while calculating the coverage logratio [default: 50]
         -z --z_score=N        Number of standard deviations away from the mean to call a breakpoint [default: 5]
 
-    *Example* 
+
+    **Example** 
         
         `python Segmentum.py G9_6338_t.wig.gz G9_6338_n.wig.gz B_allele_fraction.tsv.gz 11 0.8 0.3`
 
@@ -62,7 +63,7 @@ Segmentum outputs a SEG file with the same name as the tumor file.
 ## Visualization of the results in IGV
 In order to visualize the results in IGV a new file should be created containing only first 5 fields of the output file.
     
-    *Example*
+    **Example**
         
         `cut -f1,2,3,4,5 G9_6338_t.seg  > IGV_g9_6338.seg`´
 
@@ -71,13 +72,14 @@ The IGV_g9_6338.seg is now ready to be loaded in IGV.
 ## Extracting copy neutral LOH regions
 In order to extract copy neutral LOH regions from the output(s) following command is used:
     
-    `python Recurrent_cnLOH.py <seg_files>... [-c N] [-b N]` 
-
+    `python Recurrent_cnLOH.py <seg_files>... [-c N] [-b N]`  
+    
     Options:
         -h --help         Show this screen.
         -c --clogr_thresh=N   Coverage logratio must be below this threshold to call a copy neutral LOH region [default: 0.1]
         -b --baf_thresh=N     B-allele fraction must be below this threshold to call a copy neutral LOH region [default: 0.15]  
-    *Example*
+        
+    **Example**
     
         `python Recurrent_cnLOH.py G9_6338_t.seg`
 
@@ -93,7 +95,7 @@ In order to create the coverage files, one can use the Pypette package available
         -P --plus Calculate coverage only for the plus strand. 
         -M --minus Calculate coverage only for the minus strand.
     
-    *Example* 
+    **Example** 
     
         `coverage tiled G9_6338_t.bam 2000 | gzip -c > G9_6338_t.wig.gz`
         `coverage tiled G9_6338_n.bam 2000 | gzip -c > G9_6338_n.wig.gz`
@@ -115,7 +117,7 @@ In order to create the B-allele-fraction file, one can use the Pypette package a
         --homz=N:R Minimum evidence for homozygous alt [default: 4:0.8] 
         --keep-all Show sites even if they are all homozygous reference
     
-    *Example*
+    **Example**
         
     1. Run the following command for each chromosome (example command for chr20 is shown):
         `variant call --hetz=4:0.15 --homz=4:0.8 --ref=8:0.95 -Q _n -r chr20 hg19.fa G9_6338_t.bam G9_6338_n.bam | gzip -c > chr20.vcf.gz`
