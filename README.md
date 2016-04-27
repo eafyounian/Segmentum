@@ -1,9 +1,9 @@
 # Segmentum
-Segmentum a fast tool for copy number analysis of cancer genome.
+Segmentum: a tool for copy number analysis of cancer genome.
 
 ##Introduction
 
-Segmentum is a fast tool for the identification of CNAs and copy-neutral loss of heterozygosity (LOH) in tumor samples using whole-genome sequencing data. Segmentum segments the genome by analyzing the read-depth and B-allele fraction profiles using a double sliding window method. It requires a matched normal sample to correct for biases such as GC-content and mapability and to discriminate somatic from germline events. Segmentum, written in the Python programming language, is fast and performs segmentation of a whole genome in less than two minutes.
+Segmentum is a tool for the identification of CNAs and copy-neutral loss of heterozygosity (LOH) in tumor samples using whole-genome sequencing data. Segmentum segments the genome by analyzing the read-depth and B-allele fraction profiles using a double sliding window method. It requires a matched normal sample to correct for biases and to discriminate somatic from germline events. Segmentum, written in the Python programming language, is fast and performs segmentation of a whole genome in less than two minutes.
     
 ## Input files
 **1.** Tumor and its matched normal coverage files with WIG format.
