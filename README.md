@@ -118,7 +118,7 @@ Options:
 segmentum calculate BAF hg19.fa hg19_1000g_2014oct_SNPs.tsv.gz G9_6338_t.bam G9_6338_n.bam --hetz=4:0.3 -q20 | gzip -c > B_allele_fraction.tsv.gz
 ```
 
-**Note on SNP postion file:** the SNP position file should have the following format:  
+**Note on SNP postion file:** You can either use the provided SNP postion file or make one of your own. If you are planning to use the provided one you can download it from here: http://compbio.uta.fi/segmentum/hg19_1000g_2014oct_SNPs.tsv.gz. If you are planning to make your own SNP position file, the file should have the following format: 
 
 ```
     chr     position
