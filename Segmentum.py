@@ -33,7 +33,7 @@ Author: Ebrahim Afyounian <ebrahim.afyounian@uta.fi>
 from __future__ import print_function
 from coverage_tiled import coverage_tiled
 from variant_call import calculate_BAF
-from recurrent_cnLOH import find_chromosome_length, find_cnloh, find_recurrent
+from Recurrent_cnLOH import find_chromosome_length, find_cnloh, find_recurrent
 from simulator import simulate, open_file
 import sys, gzip, math, time, re, docopt, subprocess, os
 import scipy.signal as sig 
