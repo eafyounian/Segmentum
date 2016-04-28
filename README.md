@@ -98,8 +98,8 @@ Options:
     
 **Example**  
 ```
-coverage tiled G9_6338_t.bam 2000 | gzip -c > G9_6338_t.wig.gz
-coverage tiled G9_6338_n.bam 2000 | gzip -c > G9_6338_n.wig.gz
+segmentum extract read depth G9_6338_t.bam 2000 | gzip -c > G9_6338_t.wig.gz
+segmentum extract read depth G9_6338_n.bam 2000 | gzip -c > G9_6338_n.wig.gz
 ```
         
 In order to create the B-allele-fraction file, use the following command:
