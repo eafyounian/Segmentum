@@ -16,7 +16,7 @@ Options:
   -m --min_read=N       Minimum number of reads from the normal sample to calculate the coverage log ratio [default: 50]
   -l --logr_merge=N     Log ratio segments merging threshold [default: 0.15]
   -b --baf_merge=N      B-allele fraction segments merging threshold [default: 0.05]
-  -q --quality=N        Minimum mapping quality [default: 10].
+  -q --quality=N        Minimum mapping quality [default: 10]
   -r <region>           Restrict analysis to chromosomal region
   --hetz=N:R            Minimum evidence for heterozygous [default: 4:0.3]
   -c --clogr_thresh=N   Coverage logratio must be below this threshold to call a copy neutral LOH region [default: 0.1]
