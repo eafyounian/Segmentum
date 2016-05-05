@@ -33,7 +33,7 @@ Segmentum requires [Samtools](https://github.com/samtools/samtools) to be instal
 
 **Example**  
     
-    CHROM   POSITION    REF     ALT     G9_6338_t
+    CHROM   POSITION    REF     ALT     sample_x_t
     chr1    10174       C       T       0.00
     chr1    10177       A       C       0.08
     chr1    10583       G       A       0.00
@@ -45,10 +45,10 @@ Segmentum outputs a SEG file containing the identified segments.
 
 **Example**  
 
-    'ID             chrom   loc.start       loc.end     num_probes      seg.mean        baf.mean
-    G9_6338_t       chr1    8000            80000       72              0.246188        0.425905
-    G9_6338_t       chr1    80000           173000      93              -0.007791       0.365433
-    G9_6338_t       chr1    173000          270000      97              -0.708895       0.487773
+    'ID              chrom   loc.start       loc.end     num_probes      seg.mean        baf.mean
+    sample_x_t       chr1    8000            80000       72              0.246188        0.425905
+    sample_x_t       chr1    80000           173000      93              -0.007791       0.365433
+    sample_x_t       chr1    173000          270000      97              -0.708895       0.487773
      
 ## Running Segmentum
 Segmentum can be run in two modes with/without using B-allele fraction data with the following commands:
@@ -72,7 +72,7 @@ Options:
 ```
 
 **Example with BAF**   
-    `Segmentum analyze with BAF G9_6338_t.wig.gz G9_6338_n.wig.gz B_allele_fraction.tsv.gz 11 0.7 0.3`
+    `Segmentum analyze with BAF sample_x_t.wig.gz sample_x_n.wig.gz B_allele_fraction.tsv.gz 11 0.7 0.3`
 
 Segmentum outputs the results to standard output by default. Use `-p False`  to create a SEG file with the same name as the tumor file.
     
@@ -80,9 +80,9 @@ Segmentum outputs the results to standard output by default. Use `-p False`  to 
 In order to visualize the results in IGV, a new file should be created containing only first 6 fields of the output file.
 
 **Example**  
-    `cut -f1,2,3,4,5,6 G9_6338_t.seg  > IGV_g9_6338.seg`  
+    `cut -f1,2,3,4,5,6 sample_x_t.seg  > IGV_sample_x_t.seg`  
 
-`IGV_g9_6338.seg` is now ready to be loaded in IGV.
+`IGV_sample_x_t.seg` is now ready to be loaded in IGV.
     
 ## Extracting copy neutral LOH regions
 In order to extract copy neutral LOH regions from the output(s) use the following command:
@@ -96,7 +96,8 @@ Options:
 ```
 
 **Example**  
-`segmentum find recurrent cnLOHs G9_6338_t.seg`  
+`segmentum find recurrent cnLOHs sample_x_t.seg`  
+`segmentum find recurrent cnLOHs sample_x_t.seg sample_y_t.seg sample_z_t.seg  #in case of more samples`      
 
 ## Creating the input files from BAM files
 In order to create the coverage files, use the following command:
@@ -110,8 +111,8 @@ Options:
     
 **Example**  
 ```
-segmentum extract read depth G9_6338_t.bam 2000 | gzip -c > G9_6338_t.wig.gz
-segmentum extract read depth G9_6338_n.bam 2000 | gzip -c > G9_6338_n.wig.gz
+segmentum extract read depth sample_x_t.bam 2000 | gzip -c > sample_x_t.wig.gz
+segmentum extract read depth sample_x_n.bam 2000 | gzip -c > sample_x_n.wig.gz
 ```
         
 In order to create the B-allele-fraction file, use the following command:
@@ -127,7 +128,7 @@ Options:
 
 **Example**  
 ```
-segmentum calculate BAF hg19.fa hg19_1000g_2014oct_SNPs.tsv.gz G9_6338_t.bam G9_6338_n.bam --hetz=4:0.3 -q20 | gzip -c > B_allele_fraction.tsv.gz
+segmentum calculate BAF hg19.fa hg19_1000g_2014oct_SNPs.tsv.gz sample_x_t.bam sample_x_n.bam --hetz=4:0.3 -q20 | gzip -c > B_allele_fraction.tsv.gz
 ```
 
 **Note on SNP postion file:** You can either use the provided SNP postion file or make one of your own. If you are planning to use the provided one you can download it from here: http://compbio.uta.fi/segmentum/hg19_1000g_2014oct_SNPs.tsv.gz. If you are planning to make your own SNP position file, the file should have the following format: 
@@ -141,3 +142,5 @@ segmentum calculate BAF hg19.fa hg19_1000g_2014oct_SNPs.tsv.gz G9_6338_t.bam G9_
     1       10505  
 
 ```
+
+**Samples** You can find a set of sample coverage and BAF files for experimentation with Segmenum here:  http://compbio.uta.fi/segmentum/sample_files.tar.gz.   
