@@ -210,7 +210,7 @@ def allele_frac_mean_filt(allele_fractions, win_size, step, start):
             win_start += step
             win_end += step
         
-        avg_allele_frac = np.concatenate((   np.full( (win_size / 2)+1 , np.nan   )  , avg_allele_frac))
+        avg_allele_frac = np.concatenate((   np.full( int(win_size / 2)+1 , np.nan   )  , avg_allele_frac))
         
         chr = Chromosome()
         chr.start = start
@@ -226,8 +226,8 @@ def find_mean_difference(allele_fractions, win_size):
     for chrom in allele_fractions:
         means = np.array(allele_fractions[chrom].values)
         abs_mean_diffs = np.absolute( means[(win_size - 1):] - means[: means.size - win_size + 1])
-        abs_mean_diffs = np.concatenate((np.zeros((win_size - 1) / 2), abs_mean_diffs ))
-        abs_mean_diffs = np.concatenate((abs_mean_diffs , np.zeros((win_size - 1) / 2)))
+        abs_mean_diffs = np.concatenate((np.zeros(int((win_size - 1) / 2)), abs_mean_diffs ))
+        abs_mean_diffs = np.concatenate((abs_mean_diffs , np.zeros(int((win_size - 1) / 2))))
         
         chr = Chromosome()
         chr.start = allele_fractions[chrom].start
@@ -310,8 +310,8 @@ def double_sliding_window_all_chromosomes(log_ratios, win_size):
         ## Using np.convolve() as a mean filter (Implements the mean filter using convolution)
         mean_filtered_values = np.convolve(log_ratios[chrom].values, np.ones((win_size,))/win_size, mode='same')  
         chr_mean_diffs = np.absolute(mean_filtered_values[(win_size - 1):] - mean_filtered_values[: mean_filtered_values.size - win_size + 1])
-        chr_mean_diffs = np.concatenate((np.zeros((win_size - 1) / 2), chr_mean_diffs))
-        chr_mean_diffs = np.concatenate((chr_mean_diffs, np.zeros((win_size - 1) / 2)))
+        chr_mean_diffs = np.concatenate((np.zeros(int((win_size - 1) / 2)), chr_mean_diffs))
+        chr_mean_diffs = np.concatenate((chr_mean_diffs, np.zeros(int((win_size - 1) / 2))))
         
         chr = Chromosome()
         chr.start = log_ratios[chrom].start
@@ -331,8 +331,21 @@ def calculate_logratios(tumor_sample, reference_sample, min_read):
     log_ratios = {} #dictionary holding the logRatio for each chromosome
     
     modes = [] ##Modes of log_ratios for each chromosome to take care of the systematic bias
+    
+    
+    ## Making a list of accepted chromosomes before calculating the log ratios
+    chrs1 = ['%s' %i for i in range(1, 23)]
+    chrs1.append('X')
+    chrs1.append('Y')
+    chrs2 = ['chr%s' %i for i in range(1, 23)]
+    chrs2.append('chrX')
+    chrs2.append('chrY')
+    accepted_chroms = chrs1 + chrs2
+    
+    
     for chrom in reference_sample:
-        if chrom == 'chrM' or chrom == 'chrMT' or chrom == 'chrNC_007605': continue
+        if not chrom in accepted_chroms: continue
+        
         ref_sample_values = np.array(reference_sample[chrom].values).astype(float)
         
         mask = ref_sample_values < min_read
@@ -372,8 +385,8 @@ def calculate_logratios(tumor_sample, reference_sample, min_read):
 
         mode = max_bin * bin_width + (bin_width / 2) + minimum  ## The mode of logRatios for a chromosome
         modes.append(mode)
-        
-    delete_mitochondrial_chromosome(log_ratios)
+    
+    #delete_mitochondrial_chromosome(log_ratios)
 
     ##Taking care of the systematic bias
     # sys_bias = np.median(modes)
@@ -397,22 +410,22 @@ def replace_middle_NaNs(filtered_logratios):
     
     return filtered_logratios
 
-def delete_mitochondrial_chromosome(log_ratios):
-    if 'chrM' in log_ratios:
-        del log_ratios['chrM']
-        sys.stderr.write("chrM was deleted!\n")
-    if 'chrMT' in log_ratios:
-        del log_ratios['chrMT']
-        sys.stderr.write("chrMT was deleted!\n")
-    if 'M' in log_ratios:
-        del log_ratios['M']
-        sys.stderr.write("Chromosome M was deleted!\n")
-    if 'MT' in log_ratios:
-        del log_ratios['MT']
-        sys.stderr.write("Chromosome MT was deleted!\n")
-    if 'chrNC_007605' in log_ratios:
-        del log_ratios['chrNC_007605']
-        sys.stderr.write("Chromosome NC_007605 was deleted!\n")
+##def delete_mitochondrial_chromosome(log_ratios):
+##    if 'chrM' in log_ratios:
+##        del log_ratios['chrM']
+##        sys.stderr.write("chrM was deleted!\n")
+##    if 'chrMT' in log_ratios:
+##        del log_ratios['chrMT']
+##        sys.stderr.write("chrMT was deleted!\n")
+##    if 'M' in log_ratios:
+##        del log_ratios['M']
+##        sys.stderr.write("Chromosome M was deleted!\n")
+##    if 'MT' in log_ratios:
+##        del log_ratios['MT']
+##        sys.stderr.write("Chromosome MT was deleted!\n")
+##    if 'chrNC_007605' in log_ratios:
+##        del log_ratios['chrNC_007605']
+##        sys.stderr.write("Chromosome NC_007605 was deleted!\n")
 
 def find_consensus_change_points_win_wise(log_ratios, allele_fractions, win_size, logr_thresh, baf_thresh):
     change_points = {}
