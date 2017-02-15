@@ -76,7 +76,7 @@ def coverage_tiled(bam_path, window_size, quality, mode, step, max_frag_len=1000
 			if not cov.size: continue
 			start = max(start, 0)
 			stop = min(stop, cov.size-1)
-			cov[start:stop+1] += 1
+			cov[int(start):int(stop)+1] += 1   ## casted to int() to fix the deprecation warning. 
 		
 	else:
 		# Count all individual reads.
