@@ -6,6 +6,7 @@ A tool for copy number analysis and segmenting the cancer genome.
 Usage:
   segmentum extract read depth <BAM_file> <window_size> [-q N] 
   segmentum calculate BAF <genome_fasta> <SNP_position> <tumor> <normal> [--hetz=N:R] [-q N] [-r REGION]
+  segmentum plot <tumor> <normal> <BAF_file> <window_size>  [-m N]
   segmentum analyze with BAF <tumor> <normal> <BAF_file> <window_size> <clogr_threshold> <BAF_threshold> [-m N] [-l N] [-b N] [-p N] [-B N]
   segmentum analyze without BAF <tumor> <normal> <window_size> <clogr_threshold> [-m N] [-l N] [-p N]
   segmentum find recurrent cnLOHs <seg_files>... [-c N] [-t N]
@@ -326,7 +327,7 @@ def filter_outliers(log_ratios, win_size):
         log_ratios[chrom].values = sig.medfilt(log_ratios[chrom].values, win_size)
     return log_ratios
 
-def calculate_logratios(tumor_sample, reference_sample, min_read):
+def calculate_logratios(tumor_sample, reference_sample, min_read, suppress_stderr=False):
     """Builds the dictionary that holds the logRatio for each chromosome and also takes care of the systematic bias"""
     log_ratios = {} #dictionary holding the logRatio for each chromosome
     
@@ -391,12 +392,13 @@ def calculate_logratios(tumor_sample, reference_sample, min_read):
     ##Taking care of the systematic bias
     # sys_bias = np.median(modes)
     sys_bias = np.median(modes) if len(modes) != 0 else 0   ##this is for when there is no systematic bias
-    sys.stderr.write("Estimated systematic bias: %.3f.\n" %(sys_bias))
+    
+    if not suppress_stderr: sys.stderr.write("Estimated systematic bias: %.3f.\n" %(sys_bias))
     
     for chrom in log_ratios:
         log_ratios[chrom].values = log_ratios[chrom].values - sys_bias
     
-    sys.stderr.write("minimum number of reads required at each location to calculate the coverage log ratio: %d.\n" %(min_read))
+    if not suppress_stderr: sys.stderr.write("minimum number of reads required at each location to calculate the coverage log ratio: %d.\n" %(min_read))
     return log_ratios     ## Bias free log ratios
 
 def replace_middle_NaNs(filtered_logratios):
@@ -799,13 +801,103 @@ def make_seg_only_baf(seg_file):
     file.close()
     file2.close()
 
+    
+def plot_copynumber_baf(sample_file, ref_file, baf_file, win_size, min_read):
+
+    import matplotlib
+    matplotlib.use('Agg')
+    from matplotlib import cm
+    import matplotlib.pyplot as plt
+    import warnings
+    
+    ## loading logratios
+    logratios = calculate_logratios(read_wig(sample_file), read_wig(ref_file), min_read, suppress_stderr=True)
+    logratios = filter_outliers(logratios, 5)
+    
+    ## loading baf
+    sample_file_name = os.path.basename(os.path.splitext(sample_file)[0])
+    if 'wig' in sample_file_name: sample_file_name = sample_file_name.replace('.wig', '')
+    allele_fractions = extract_sample(baf_file, sample_file_name)
+    
+    ## extracting the step i.e. the half of the win_size used for extracting the read depths
+    step = logratios[list(logratios.keys())[0]].step
+    
+    ## list of chromosomes for which the plot is made
+    if 'chr' not in list(logratios.keys())[0]:
+        chrom_nums = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22', 'X', 'Y']
+    else:
+        chrom_nums = ['chr1', 'chr2', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17', 'chr18', 'chr19', 'chr20', 'chr21', 'chr22']
+    
+    ## loading the color palette
+    colors = cm.rainbow(np.linspace(0, 1, len(chrom_nums)))
+    
+    ## setting the plot 
+    plt.figure(figsize=(10,10))
+    
+    plt.xlim((-1.5,1.5))
+    plt.xticks(np.arange(-1.5,1.6,0.25))
+    
+    plt.ylim((0, 1))
+    plt.yticks(np.arange(0,1.1,0.1))
+    
+    plt.title('Copy number-allele fraction clusters (bin-size: %skb.)' %int(win_size/1000), fontsize=20)
+    
+    plt.xlabel('covarage logratios', fontsize=15)
+    plt.ylabel('B-allele fractions', fontsize=15)
+    
+    ##############
+    ## PLOTTING ##
+    ##############
+    
+    for c, chrom in enumerate(chrom_nums):
+        
+        ## Binning logratios
+        lrs = logratios[chrom].values
+        chrom_size = lrs.shape[0] * step
+        
+        binned_lr = []
+        for i in range(0, int(chrom_size/step), win_size):
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", category=RuntimeWarning)
+                binned_lr.append(np.nanmedian(lrs[i: i+win_size]))
+        
+        ## Binning BAFs
+        baf_vals = np.array(allele_fractions[chrom].values)
+        baf_pos  = np.array(allele_fractions[chrom].positions)
+        
+        binned_baf = []
+        snp_nums = []  ##number of snps in each bin used to determine the size of the circles in the scatterplot
+        for i in range(0, chrom_size, win_size*step):
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", category=RuntimeWarning)
+                
+                stt = np.argmax(baf_pos > i)
+                end = np.argmax(baf_pos > i +(win_size * step))
+
+                binned_baf.append( np.nanmedian(baf_vals[stt:end]) )
+                snp_nums.append(baf_vals[stt:end].shape[0])
+
+        snp_nums = np.array(snp_nums)
+        sizes = ((snp_nums - min(snp_nums)) / max(snp_nums - min(snp_nums))) * 750
+        
+        ## plotting the scatter plot
+        plt.scatter(binned_lr, binned_baf, c=colors[c], s=sizes, alpha=0.3, label=chrom)
+    
+    legend = plt.legend(loc='best', title='Chroms')
+    for i in range(len(legend.legendHandles)):
+       legend.legendHandles[i]._sizes = [75]
+    plt.grid()
+    
+    ## saving the plot
+    plt.savefig('%s_plot.png' %sample_file_name)
+
 def segmentum_with_baf(min_read, sample_file, ref_file, snp_file, win_size, clogr_threshold, baf_thresh, logr_merge_thresh, baf_merge_thresh, z_score, to_print, BAF_to_WIG):
     st = time.time()
     log_ratios = calculate_logratios(read_wig(sample_file), read_wig(ref_file), min_read)
 
     ## Deleting ChrY for the moment...
     ## This is because for the moment we don't get any signal from chrY
-    ## because of no heterozygous snp is detected.
+    ## because no heterozygous snp is detected.
     log_ratios.pop('chrY', None)
     filtered_log_ratios = filter_outliers(log_ratios, 5)
     filtered_log_ratios = replace_middle_NaNs(filtered_log_ratios)
@@ -871,6 +963,8 @@ if __name__ == '__main__':
         segmentum_with_baf(int(args['--min_read']), args['<tumor>'], args['<normal>'], args['<BAF_file>'], int(args['<window_size>']), float(args['<clogr_threshold>']), float(args['<BAF_threshold>']), float(args['--logr_merge']), float(args['--baf_merge']), 5, args['--print'], args['--BAF'])
     elif args['analyze'] and args['without'] and args['BAF']:
         segmentum_without_baf(int(args['--min_read']), args['<tumor>'], args['<normal>'], int(args['<window_size>']),  float(args['<clogr_threshold>']), float(args['--logr_merge']), 5, args['--print'])
+    elif args['plot']:
+        plot_copynumber_baf(args['<tumor>'], args['<normal>'], args['<BAF_file>'], int(args['<window_size>']), int(args['--min_read']))
     elif args['find'] and args['recurrent'] and ['cnLOHs']:
         chrom_lengths = find_chromosome_length(args['<seg_files>'])
         clogr_thresh = float(args['--clogr_thresh'])
