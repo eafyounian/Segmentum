@@ -143,4 +143,6 @@ segmentum calculate BAF hg19.fa hg19_1000g_2014oct_SNPs.tsv.gz sample_x_t.bam sa
 
 ```
 
-**Samples** You can find a set of sample coverage and BAF files for experimentation with Segmenum here:  http://compbio.uta.fi/segmentum/sample_files.tar.gz.   
+**Samples** You can find a set of sample coverage and BAF files for experimentation with Segmenum here:  http://compbio.uta.fi/segmentum/sample_files.tar.gz.    
+     
+**simulated data** You also can find a set of simulated coverage and BAF data as well as its corresponding ground truth for experimentation here: http://compbio.uta.fi/segmentum/simulated_data_example.tar.gz.    
