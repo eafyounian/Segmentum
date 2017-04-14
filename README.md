@@ -1,9 +1,15 @@
 # Segmentum
 Segmentum: a tool for copy number analysis of cancer genome.
 
-##Introduction
+## Introduction
 
 Segmentum is a tool for the identification of CNAs and copy-neutral loss of heterozygosity (LOH) in tumor samples using whole-genome sequencing data. Segmentum segments the genome by analyzing the read-depth and B-allele fraction profiles using a double sliding window method. It requires a matched normal sample to correct for biases and to discriminate somatic from germline events. Segmentum, written in the Python programming language, is fast and performs segmentation of a whole genome in less than two minutes.
+
+### Citation information
+Scientific paper corresponding to this work is openly accessible online at BMC Bioinformatics.
+
+Afyounian, E., Annala, M. and Nykter, M., 2017. Segmentum: a tool for copy number analysis of cancer genomes. BMC Bioinformatics, [online] 18(215), pp.1-10. Available at: <https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-017-1626-8>
+
 
 ## Installation
 To install Segmentum, download the latest release and extract it to a folder. Then run the Makefile and add the subfolder bin/ to your PATH. See below for an example:    
