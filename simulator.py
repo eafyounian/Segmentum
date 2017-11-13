@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usr/bin/env python3
 """
 A tool for simulating normal and tumour read depth and B-allele fraction of Heterozygous SNPs.
 
