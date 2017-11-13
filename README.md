@@ -94,7 +94,7 @@ In order to visualize the results in IGV, a new file should be created containin
 In order to extract copy neutral LOH regions from the output(s) use the following command:
 
 ```
-segmentum find recurrent cnLOHs <seg_files>... [-c N] [-t N]  
+Segmentum find recurrent cnLOHs <seg_files>... [-c N] [-t N]  
     
 Options:  
     -c --clogr_thresh=N   Coverage logratio must be below this threshold to call a copy neutral LOH region [default: 0.1]    
@@ -102,14 +102,14 @@ Options:
 ```
 
 **Example**  
-`segmentum find recurrent cnLOHs sample_x_t.seg`  
-`segmentum find recurrent cnLOHs sample_x_t.seg sample_y_t.seg sample_z_t.seg  #in case of more samples`      
+`Segmentum find recurrent cnLOHs sample_x_t.seg`  
+`Segmentum find recurrent cnLOHs sample_x_t.seg sample_y_t.seg sample_z_t.seg  #in case of more samples`      
 
 ## Creating the input files from BAM files
 In order to create the coverage files, use the following command:
 
 ```    
-segmentum extract read depth <BAM_file> <window_size> [-q N]    
+Segmentum extract read depth <BAM_file> <window_size> [-q N]    
         
 Options:   
     -q --quality=N        Minimum mapping quality [default: 10]   
@@ -117,14 +117,14 @@ Options:
     
 **Example**  
 ```
-segmentum extract read depth sample_x_t.bam 2000 | gzip -c > sample_x_t.wig.gz
-segmentum extract read depth sample_x_n.bam 2000 | gzip -c > sample_x_n.wig.gz
+Segmentum extract read depth sample_x_t.bam 2000 | gzip -c > sample_x_t.wig.gz
+Segmentum extract read depth sample_x_n.bam 2000 | gzip -c > sample_x_n.wig.gz
 ```
         
 In order to create the B-allele-fraction file, use the following command:
 
 ```    
-segmentum calculate BAF <genome_fasta> <SNP_position> <tumor> <normal> [--hetz=N:R] [-q N] [-r REGION]   
+Segmentum calculate BAF <genome_fasta> <SNP_position> <tumor> <normal> [--hetz=N:R] [-q N] [-r REGION]   
         
 Options:  
     -r <region>           Restrict analysis to chromosomal region     
@@ -134,7 +134,7 @@ Options:
 
 **Example**  
 ```
-segmentum calculate BAF hg19.fa hg19_1000g_2014oct_SNPs.tsv.gz sample_x_t.bam sample_x_n.bam --hetz=4:0.3 -q20 | gzip -c > B_allele_fraction.tsv.gz
+Segmentum calculate BAF hg19.fa hg19_1000g_2014oct_SNPs.tsv.gz sample_x_t.bam sample_x_n.bam --hetz=4:0.3 -q20 | gzip -c > B_allele_fraction.tsv.gz
 ```
 
 **Note on SNP postion file:** You can either use the provided SNP postion file or make one of your own. If you are planning to use the provided one you can download it from here: http://compbio.uta.fi/segmentum/hg19_1000g_2014oct_SNPs.tsv.gz. If you are planning to make your own SNP position file, the file should have the following format: 
