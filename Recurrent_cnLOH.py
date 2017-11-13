@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usr/bin/env python3
 """
 A tool for extracting recurrent copy neutral LOH regions across one or many samples.
 
