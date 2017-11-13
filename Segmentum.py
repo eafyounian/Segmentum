@@ -4,13 +4,13 @@
 A tool for copy number analysis and segmenting the cancer genome.
 
 Usage:
-  segmentum extract read depth <BAM_file> <window_size> [-q N] 
-  segmentum calculate BAF <genome_fasta> <SNP_position> <tumor> <normal> [--hetz=N:R] [-q N] [-r REGION]
-  segmentum plot <tumor> <normal> <BAF_file> <window_size>  [-m N]
-  segmentum analyze with BAF <tumor> <normal> <BAF_file> <window_size> <clogr_threshold> <BAF_threshold> [-m N] [-l N] [-b N] [-p N] [-B N]
-  segmentum analyze without BAF <tumor> <normal> <window_size> <clogr_threshold> [-m N] [-l N] [-p N]
-  segmentum find recurrent cnLOHs <seg_files>... [-c N] [-t N]
-  segmentum simulate <normal> [-P N] [-O N] [-L N]
+  Segmentum extract read depth <BAM_file> <window_size> [-q N] 
+  Segmentum calculate BAF <genome_fasta> <SNP_position> <tumor> <normal> [--hetz=N:R] [-q N] [-r REGION]
+  Segmentum plot <tumor> <normal> <BAF_file> <window_size>  [-m N]
+  Segmentum analyze with BAF <tumor> <normal> <BAF_file> <window_size> <clogr_threshold> <BAF_threshold> [-m N] [-l N] [-b N] [-p N] [-B N]
+  Segmentum analyze without BAF <tumor> <normal> <window_size> <clogr_threshold> [-m N] [-l N] [-p N]
+  Segmentum find recurrent cnLOHs <seg_files>... [-c N] [-t N]
+  Segmentum simulate <normal> [-P N] [-O N] [-L N]
   
 Options:
   -h --help             Show this screen.
