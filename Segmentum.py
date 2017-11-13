@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usr/bin/env python3
 
 """
 A tool for copy number analysis and segmenting the cancer genome.
