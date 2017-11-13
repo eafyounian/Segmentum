@@ -61,10 +61,10 @@ Segmentum can be run in two modes with/without using B-allele fraction data with
 
 ```    
 ## with BAF
-segmentum analyze with BAF <tumor> <normal> <BAF_file> <window_size> <clogr_threshold> <BAF_threshold> [-m N] [-l N] [-b N] [-p N] [-B N]     
+Segmentum analyze with BAF <tumor> <normal> <BAF_file> <window_size> <clogr_threshold> <BAF_threshold> [-m N] [-l N] [-b N] [-p N] [-B N]     
 
 ## without BAF
-segmentum analyze without BAF <tumor> <normal> <window_size> <clogr_threshold> [-m N] [-l N]  
+Segmentum analyze without BAF <tumor> <normal> <window_size> <clogr_threshold> [-m N] [-l N]  
 
 
 Options:  
