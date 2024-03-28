@@ -137,7 +137,7 @@ Options:
 Segmentum calculate BAF hg19.fa hg19_1000g_2014oct_SNPs.tsv.gz sample_x_t.bam sample_x_n.bam --hetz=4:0.3 -q20 | gzip -c > B_allele_fraction.tsv.gz
 ```
 
-**Note on SNP postion file:** You can either use the provided SNP postion file or make one of your own. If you are planning to use the provided one you can download it from here: http://compbio.uta.fi/segmentum/hg19_1000g_2014oct_SNPs.tsv.gz. If you are planning to make your own SNP position file, the file should have the following format where the two columns are chromosome and position respectively: 
+**Note on SNP postion file:** You can either use the provided SNP postion file or make one of your own. If you are planning to use the provided one you can download it from [here (i.e., hg19_1000g_2014oct_SNPs.tsv.gz)](https://binf.rd.tuni.fi/projects/Segmentum/). If you are planning to make your own SNP position file, the file should have the following format where the two columns are chromosome and position respectively: 
 
 ```
     1       10177  
@@ -148,6 +148,6 @@ Segmentum calculate BAF hg19.fa hg19_1000g_2014oct_SNPs.tsv.gz sample_x_t.bam sa
 
 ```
 
-**Samples** You can find a set of sample coverage and BAF files for experimentation with Segmenum here:  http://compbio.uta.fi/segmentum/sample_files.tar.gz.    
+**Samples** You can find a set of sample coverage and BAF files for experimentation with Segmenum [here (i.e., sample_files.tar.gz)](https://binf.rd.tuni.fi/projects/Segmentum/).  
      
-**simulated data** You also can find a set of simulated coverage and BAF data as well as its corresponding ground truth for experimentation here: http://compbio.uta.fi/segmentum/simulated_data_example.tar.gz.    
+**simulated data** You also can find a set of simulated coverage and BAF data as well as its corresponding ground truth for experimentation [here (i.e., simulated_data_example.tar.gz)](https://binf.rd.tuni.fi/projects/Segmentum/).   
