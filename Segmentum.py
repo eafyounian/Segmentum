@@ -490,7 +490,7 @@ def find_consensus_change_points_win_wise(log_ratios, allele_fractions, win_size
         #####################
         zipped = zip(compound_scores[indices], indices)
         sorted_local_maxima = sorted(zipped, reverse = True)
-        mask = np.zeros(len(compound_scores), dtype = np.bool)
+        mask = np.zeros(len(compound_scores), dtype = bool)
         break_points = []
         for max in sorted_local_maxima:
             if mask[max[1]] == False:
@@ -584,7 +584,7 @@ def find_consensus_only_for_logr_win_wise(log_ratios, win_size, logr_thresh):
             
         zipped = zip(logr[indices], indices)
         sorted_local_maxima = sorted(zipped, reverse = True)
-        mask = np.zeros(len(logr), dtype = np.bool)
+        mask = np.zeros(len(logr), dtype = bool)
         break_points = []
         for max in sorted_local_maxima:
             if mask[max[1]] == False:
